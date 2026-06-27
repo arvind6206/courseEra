@@ -1,4 +1,5 @@
 import {Router} from 'express'
+import {courseModel} from '../model/db.js'
 
 const courseRouter = Router()
   courseRouter.post("/purchase", (req, res) => {});
