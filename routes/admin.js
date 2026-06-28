@@ -2,7 +2,11 @@ import {Router} from 'express'
 import {adminModel} from '../model/db.js '
 import jwt from 'jsonwebtoken'
 import adminMiddleware from '../middleware/admin.js'
-import { userModel } from '../model/db.js'
+import { courseModel, userModel } from '../model/db.js'
+
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 
 const adminRouter = Router()
