@@ -1,8 +1,8 @@
 import { Router } from "express";
 import {userModel} from '../model/db.js'
 import jwt from 'jsonwebtoken'
+import { JWT_USER_PASSWORD } from "../config.js";
 
-const JWT_USER_PASSWORD = "hu*gy^fy"
 const userRouter = Router();
 
 userRouter.post("/signup", async(req, res) => {

@@ -1,8 +1,10 @@
 import {Router} from 'express'
 import {adminModel} from '../model/db.js '
 import jwt from 'jsonwebtoken'
+import { JWT_ADMIN_PASSWORD } from '../config.js'
+import adminMiddleware from '../middleware/admin.js'
+import { userModel } from '../model/db.js'
 
-const JWT_ADMIN_PASSWORD = "kou%fy7gy"
 
 const adminRouter = Router()
 
@@ -46,11 +48,25 @@ adminRouter.post('/signin', async(req, res) => {
         }
 })
 
-adminRouter.post('/course', (req, res) => {
-    
+adminRouter.post('/course', async(req, res) => {
+    const adminId = req.userId
+    const {title, description, imageUrl, price} = req.body
+
+    const course = await userModel.create({
+        title,
+        description,
+        imageUrl,
+        price,
+        creatorId: adminId
+    })
+
+    res.json({
+        msg: "course created",
+        courseId: course._id
+    })
 })
 
-adminRouter.put('/course', (req, res) => {
+adminRouter.put('/course', adminMiddleware, (req, res) => {
     
 })
 
