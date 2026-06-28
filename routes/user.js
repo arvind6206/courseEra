@@ -1,7 +1,6 @@
 import { Router } from "express";
 import {userModel} from '../model/db.js'
 import jwt from 'jsonwebtoken'
-import { JWT_USER_PASSWORD } from "../config.js";
 
 const userRouter = Router();
 
@@ -33,7 +32,7 @@ userRouter.post("/signin", async(req, res) => {
     if(user){
         const token = jwt.sign({
             id: user._id
-        }, JWT_USER_PASSWORD)
+        }, process.env.JWT_USER_PASSWORD)
 
         res.json({
             token: token

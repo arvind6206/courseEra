@@ -1,4 +1,0 @@
-const JWT_USER_PASSWORD = "hu*gy^fy"
-const JWT_ADMIN_PASSWORD = "kou%fy7gy"
-
-export {JWT_ADMIN_PASSWORD, JWT_USER_PASSWORD}

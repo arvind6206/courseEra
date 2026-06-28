@@ -1,7 +1,6 @@
 import {Router} from 'express'
 import {adminModel} from '../model/db.js '
 import jwt from 'jsonwebtoken'
-import { JWT_ADMIN_PASSWORD } from '../config.js'
 import adminMiddleware from '../middleware/admin.js'
 import { userModel } from '../model/db.js'
 
@@ -36,7 +35,7 @@ adminRouter.post('/signin', async(req, res) => {
         if(admin){
             const token = jwt.sign({
                 id: admin._id
-            }, JWT_ADMIN_PASSWORD)
+            }, process.env.JWT_ADMIN_PASSWORD)
     
             res.json({
                 token: token
@@ -48,7 +47,7 @@ adminRouter.post('/signin', async(req, res) => {
         }
 })
 
-adminRouter.post('/course', async(req, res) => {
+adminRouter.post('/course', adminMiddleware, async(req, res) => {
     const adminId = req.userId
     const {title, description, imageUrl, price} = req.body
 
@@ -66,12 +65,38 @@ adminRouter.post('/course', async(req, res) => {
     })
 })
 
-adminRouter.put('/course', adminMiddleware, (req, res) => {
-    
+adminRouter.put('/course', adminMiddleware, async(req, res) => {
+     const adminId = req.userId
+    const {title, description, imageUrl, price, courseId} = req.body
+
+
+
+    const course = await userModel.updateOne({
+        _id: courseId,
+        creatorId: adminId
+    }, {
+        title,
+        description,
+        imageUrl,
+        price,
+    })
+
+    res.json({
+        msg: "course updated",
+        courseId: course._id
+    })
 })
 
-adminRouter.get('/course/bulk', (req, res) => {
-    
+adminRouter.get('/course/bulk', adminMiddleware, async(req, res) => {
+    const adminId = req.userId
+    const courses = await courseModel.find({
+        creatorId: adminId
+    })
+
+    res.json({
+        message: "Courses are",
+        courses
+    })
 })
 
 export default adminRouter
